@@ -48,6 +48,10 @@ var music_enabled: bool = false
 var effects_enabled: bool = true
 var alerts_enabled: bool = true
 
+## Whether the skippable onboarding briefing has been shown this app
+## session. Lives here (not GameState) so it survives reset_campaign().
+var onboarding_seen: bool = false
+
 
 func is_reduced_camera() -> bool:
 	return camera_motion == CameraMotion.REDUCED
