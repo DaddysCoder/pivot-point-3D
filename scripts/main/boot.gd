@@ -26,7 +26,10 @@ func _ready() -> void:
 
 func _on_begin_pressed() -> void:
 	GameState.reset_campaign()
-	SceneRouter.to_character_select()
+	if GameSettings.onboarding_seen:
+		SceneRouter.to_character_select()
+	else:
+		SceneRouter.to_onboarding()
 
 
 func _on_feel_test_pressed() -> void:
