@@ -10,19 +10,22 @@ const EVENT_SHEET := "res://assets/art/04-event-card-sheet.jpg"
 const BRIDGE_NARRATIVE := "res://assets/art/05-event-bridge-destroyed-a.jpg"
 const BRIDGE_CHOICES := "res://assets/art/06-event-bridge-destroyed-b.jpg"
 
-## Event art pairs (narrative / choice card) sliced from the Gemini event sheet.
-## Not yet present on disk — texture() falls back to null and callers fall
-## back to EVENT_SHEET/BRIDGE_NARRATIVE until the PNGs land in assets/art/.
-const SUPPLIES_DELAYED_NARRATIVE := "res://assets/art/07-event-supplies-delayed-a.png"
-const SUPPLIES_DELAYED_CHOICES := "res://assets/art/07-event-supplies-delayed-b.png"
-const SCOUT_MISSING_NARRATIVE := "res://assets/art/08-event-scout-missing-a.png"
-const SCOUT_MISSING_CHOICES := "res://assets/art/08-event-scout-missing-b.png"
-const WEATHER_CHANGES_NARRATIVE := "res://assets/art/09-event-weather-changes-a.png"
-const WEATHER_CHANGES_CHOICES := "res://assets/art/09-event-weather-changes-b.png"
-const NEW_INFORMATION_NARRATIVE := "res://assets/art/10-event-new-information-a.png"
-const NEW_INFORMATION_CHOICES := "res://assets/art/10-event-new-information-b.png"
-const ALLY_OFFERS_HELP_NARRATIVE := "res://assets/art/11-event-ally-offers-help-a.png"
-const ALLY_OFFERS_HELP_CHOICES := "res://assets/art/11-event-ally-offers-help-b.png"
+## Event art pairs (narrative / choice card) from the Gemini event sheet.
+## Narrative cards for all 5 events are in; choice cards for Scout Missing,
+## Weather Changes, New Information, and Ally Offers Help still need a clean
+## regen (current renders have titles/labels painted into the art) — those
+## constants point at files not yet on disk, and texture()/event_art() fall
+## back to EVENT_SHEET until they land.
+const SUPPLIES_DELAYED_NARRATIVE := "res://assets/art/07-event-supplies-delayed-a.jpg"
+const SUPPLIES_DELAYED_CHOICES := "res://assets/art/07-event-supplies-delayed-b.jpg"
+const SCOUT_MISSING_NARRATIVE := "res://assets/art/08-event-scout-missing-a.jpg"
+const SCOUT_MISSING_CHOICES := "res://assets/art/08-event-scout-missing-b.jpg"
+const WEATHER_CHANGES_NARRATIVE := "res://assets/art/09-event-weather-changes-a.jpg"
+const WEATHER_CHANGES_CHOICES := "res://assets/art/09-event-weather-changes-b.jpg"
+const NEW_INFORMATION_NARRATIVE := "res://assets/art/10-event-new-information-a.jpg"
+const NEW_INFORMATION_CHOICES := "res://assets/art/10-event-new-information-b.jpg"
+const ALLY_OFFERS_HELP_NARRATIVE := "res://assets/art/11-event-ally-offers-help-a.jpg"
+const ALLY_OFFERS_HELP_CHOICES := "res://assets/art/11-event-ally-offers-help-b.jpg"
 
 ## Front-facing leader portraits (character creator confirm/preview panel).
 const LEADER_PORTRAIT_MARCUS := "res://assets/art/12-leader-marcus.png"
