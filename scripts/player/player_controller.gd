@@ -26,11 +26,9 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause_menu"):
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		else:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		get_viewport().set_input_as_handled()
+		if not OptionsMenu.current:
+			OptionsMenu.open(get_tree().root, true)
+			get_viewport().set_input_as_handled()
 
 
 func _physics_process(delta: float) -> void:

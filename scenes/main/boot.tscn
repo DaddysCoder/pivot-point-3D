@@ -61,5 +61,10 @@ text = "Begin Campaign"
 layout_mode = 2
 text = "Phase 1 Feel Test (sandbox)"
 
+[node name="Options" type="Button" parent="VBox"]
+layout_mode = 2
+text = "Options"
+
 [connection signal="pressed" from="VBox/Begin" to="." method="_on_begin_pressed"]
 [connection signal="pressed" from="VBox/FeelTest" to="." method="_on_feel_test_pressed"]
+[connection signal="pressed" from="VBox/Options" to="." method="_on_options_pressed"]

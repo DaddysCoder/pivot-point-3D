@@ -85,3 +85,25 @@ static func style_button(btn: Button) -> void:
 	btn.add_theme_color_override("font_hover_color", INK)
 	btn.add_theme_color_override("font_pressed_color", INK)
 	btn.add_theme_color_override("font_disabled_color", INK_MUTED)
+	_wire_hover_cursor(btn)
+
+
+## Swaps in CursorManager's bolder hover cursor while the pointer is over
+## `control`. Safe to call once per control; guards against leaving the
+## hover depth stuck if the control leaves the tree mid-hover.
+static func _wire_hover_cursor(control: Control) -> void:
+	if control.has_meta("_hover_cursor_wired"):
+		return
+	control.set_meta("_hover_cursor_wired", true)
+	var hovering := [false]
+	control.mouse_entered.connect(func():
+		hovering[0] = true
+		CursorManager.push_hover())
+	control.mouse_exited.connect(func():
+		if hovering[0]:
+			hovering[0] = false
+			CursorManager.pop_hover())
+	control.tree_exiting.connect(func():
+		if hovering[0]:
+			hovering[0] = false
+			CursorManager.pop_hover())

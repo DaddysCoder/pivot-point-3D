@@ -1,0 +1,107 @@
+[gd_scene load_steps=2 format=3 uid="uid://bd8optmenu01"]
+
+[ext_resource type="Script" path="res://scripts/ui/options_menu.gd" id="1_script"]
+
+[node name="OptionsMenu" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.03, 0.02, 0.55)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -220.0
+offset_right = 260.0
+offset_bottom = 220.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "OPTIONS"
+horizontal_alignment = 1
+
+[node name="CameraRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/CameraRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reduced Camera Motion"
+
+[node name="ReducedCamera" type="CheckButton" parent="Panel/Margin/VBox/CameraRow"]
+layout_mode = 2
+
+[node name="InvertYRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/InvertYRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Invert Y Look"
+
+[node name="InvertY" type="CheckButton" parent="Panel/Margin/VBox/InvertYRow"]
+layout_mode = 2
+
+[node name="CursorRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/CursorRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Large, High-Contrast Cursor"
+
+[node name="LargeCursor" type="CheckButton" parent="Panel/Margin/VBox/CursorRow"]
+layout_mode = 2
+
+[node name="SensitivityRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/SensitivityRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mouse Sensitivity"
+
+[node name="Sensitivity" type="HSlider" parent="Panel/Margin/VBox/SensitivityRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.02
+max_value = 0.3
+step = 0.01
+value = 0.12
+
+[node name="Value" type="Label" parent="Panel/Margin/VBox/SensitivityRow"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "0.12"
+horizontal_alignment = 2
+
+[node name="Close" type="Button" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Close"
