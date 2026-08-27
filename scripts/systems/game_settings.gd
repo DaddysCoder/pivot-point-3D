@@ -3,7 +3,7 @@ extends Node
 
 enum CameraMotion { REDUCED, STANDARD }
 enum CursorSize { STANDARD, LARGE }
-enum InformationStyle { SHORT, NORMAL, DETAILED }
+enum InformationStyle { SHORT, STANDARD, DETAILED }
 enum TimePressure { NONE, GENTLE, TACTICAL }
 enum TransitionWarning { IMMEDIATE, WARN_10S, WARN_30S, PLAYER }
 
@@ -36,7 +36,7 @@ var decision_load: int = 3:
 		decision_load = value
 		decision_load_changed.emit(value)
 
-var information_style: InformationStyle = InformationStyle.NORMAL:
+var information_style: InformationStyle = InformationStyle.STANDARD:
 	set(value):
 		information_style = value
 		information_style_changed.emit(value)
