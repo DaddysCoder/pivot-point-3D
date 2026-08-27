@@ -1,0 +1,98 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfacprofiles01"]
+
+[ext_resource type="Script" path="res://scripts/main/facilitator_profiles.gd" id="1_script"]
+
+[node name="FacilitatorProfiles" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.07, 0.05, 1)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = -320.0
+offset_right = 340.0
+offset_bottom = 320.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "MISSION CONTROL PROFILES"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+autowrap_mode = 3
+horizontal_alignment = 1
+text = "Local facilitator notes only. No clinical labels in player view."
+
+[node name="Form" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameRow" type="HBoxContainer" parent="Panel/Margin/VBox/Form"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Panel/Margin/VBox/Form/NameRow"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Display name"
+
+[node name="Name" type="LineEdit" parent="Panel/Margin/VBox/Form/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_length = 40
+placeholder_text = "e.g. Coach Dana"
+
+[node name="Notes" type="TextEdit" parent="Panel/Margin/VBox/Form"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+placeholder_text = "Notes (free text, local only)"
+
+[node name="SaveRow" type="HBoxContainer" parent="Panel/Margin/VBox/Form"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="Panel/Margin/VBox/Form/SaveRow"]
+layout_mode = 2
+disabled = true
+text = "Save Profile"
+
+[node name="ScrollList" type="ScrollContainer" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="Panel/Margin/VBox/ScrollList"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Back" type="Button" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Back"

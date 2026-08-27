@@ -8,6 +8,7 @@ extends Control
 @onready var begin_btn: Button = $VBox/Begin
 @onready var feel_btn: Button = $VBox/FeelTest
 @onready var options_btn: Button = $VBox/Options
+@onready var facilitator_btn: Button = $VBox/Facilitator
 
 
 func _ready() -> void:
@@ -22,6 +23,7 @@ func _ready() -> void:
 	ArtCatalog.style_button(begin_btn)
 	ArtCatalog.style_button(feel_btn)
 	ArtCatalog.style_button(options_btn)
+	ArtCatalog.style_button(facilitator_btn)
 
 
 func _on_begin_pressed() -> void:
@@ -38,3 +40,7 @@ func _on_feel_test_pressed() -> void:
 
 func _on_options_pressed() -> void:
 	OptionsMenu.open(self, false)
+
+
+func _on_facilitator_pressed() -> void:
+	SceneRouter.to_facilitator_profiles()
