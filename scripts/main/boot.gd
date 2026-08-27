@@ -7,6 +7,7 @@ extends Control
 @onready var tag: Label = $VBox/Tag
 @onready var begin_btn: Button = $VBox/Begin
 @onready var feel_btn: Button = $VBox/FeelTest
+@onready var options_btn: Button = $VBox/Options
 
 
 func _ready() -> void:
@@ -20,6 +21,7 @@ func _ready() -> void:
 	tag.add_theme_color_override("font_color", Color(0.90, 0.84, 0.70, 1))
 	ArtCatalog.style_button(begin_btn)
 	ArtCatalog.style_button(feel_btn)
+	ArtCatalog.style_button(options_btn)
 
 
 func _on_begin_pressed() -> void:
@@ -29,3 +31,7 @@ func _on_begin_pressed() -> void:
 
 func _on_feel_test_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main/test_environment.tscn")
+
+
+func _on_options_pressed() -> void:
+	OptionsMenu.open(self, false)
