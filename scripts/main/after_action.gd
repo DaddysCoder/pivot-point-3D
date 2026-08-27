@@ -16,7 +16,9 @@ func _ready() -> void:
 	ArtCatalog.apply_parchment_panel(panel)
 	ArtCatalog.style_ink_label(body, 16)
 	ArtCatalog.style_button(hub_btn)
-	hub_btn.pressed.connect(func(): SceneRouter.to_base_hub())
+	hub_btn.pressed.connect(func():
+		SaveManager.autosave()
+		SceneRouter.to_base_hub())
 	var s: Dictionary = GameState.last_after_action
 	if s.is_empty():
 		body.text = "No mission summary."

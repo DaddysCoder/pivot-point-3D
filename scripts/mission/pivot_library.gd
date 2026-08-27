@@ -152,9 +152,34 @@ static func _supplies_delayed() -> Dictionary:
 		"category": "resource",
 		"world_change": "supply_delay",
 		"choices": [
-			_choice("sd-wait", "Wait for delivery", "Skip a beat and hold position.", "hold", {"effects": [{"type": "add_turns", "amount": 1}, {"type": "resume_mission"}]}),
-			_choice("sd-forage", "Forage nearby", "Spend time; gain a little material.", "adapt", {"effects": [{"type": "add_turns", "amount": 1}, {"type": "gain_materials", "amount": 1}, {"type": "resume_mission"}]}),
-			_choice("sd-adapt", "Press on light", "Continue without the delayed stores.", "adapt", {"effects": [{"type": "flag", "key": "travel_light"}, {"type": "resume_mission"}]}),
+			_choice(
+				"sd-repair",
+				"Repair the wagon",
+				"Send materials forward to patch the axle and get it rolling.",
+				"repair",
+				{"effects": [{"type": "spend_materials", "amount": 1}, {"type": "flag", "key": "wagon_repaired"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"sd-ask",
+				"Ask a nearby settlement",
+				"Trade influence for materials to cover the gap.",
+				"ask",
+				{"effects": [{"type": "spend_influence", "amount": 1}, {"type": "gain_materials", "amount": 1}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"sd-reroute",
+				"Reroute the delivery",
+				"Send the wagon train the long way around the holdup.",
+				"reroute",
+				{"effects": [{"type": "add_turns", "amount": 2}, {"type": "flag", "key": "supply_rerouted"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"sd-adapt",
+				"Press on light",
+				"Continue without the delayed stores.",
+				"adapt",
+				{"effects": [{"type": "flag", "key": "travel_light"}, {"type": "resume_mission"}]}
+			),
 		],
 	}
 
@@ -168,9 +193,34 @@ static func _scout_missing() -> Dictionary:
 		"category": "recon",
 		"world_change": "scout_missing",
 		"choices": [
-			_choice("sm-search", "Search", "Spend a turn looking along the ridge.", "recon", {"effects": [{"type": "add_turns", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}),
-			_choice("sm-hunker", "Hunker down", "Fortify and wait for contact.", "hold", {"effects": [{"type": "flag", "key": "fortified"}, {"type": "resume_mission"}]}),
-			_choice("sm-messenger", "Send messenger", "Spend influence to raise the line.", "ask", {"effects": [{"type": "spend_influence", "amount": 1}, {"type": "resume_mission"}]}),
+			_choice(
+				"sm-repair",
+				"Retrace their steps",
+				"Spend a turn searching the ridge and recover the line.",
+				"repair",
+				{"effects": [{"type": "add_turns", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "flag", "key": "scout_recovered"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"sm-ask",
+				"Send a messenger",
+				"Spend influence to raise the line and call for a replacement.",
+				"ask",
+				{"effects": [{"type": "spend_influence", "amount": 1}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"sm-reroute",
+				"Reroute around the gap",
+				"Take a longer path that doesn't need forward eyes.",
+				"reroute",
+				{"effects": [{"type": "add_turns", "amount": 1}, {"type": "flag", "key": "bypassed_scout_gap"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"sm-adapt",
+				"Hunker down",
+				"Fortify in place and wait for contact.",
+				"adapt",
+				{"effects": [{"type": "flag", "key": "fortified"}, {"type": "resume_mission"}]}
+			),
 		],
 	}
 
@@ -184,9 +234,34 @@ static func _weather_changes() -> Dictionary:
 		"category": "weather",
 		"world_change": "weather",
 		"choices": [
-			_choice("wc-march", "March through storm", "Slow going; learn the road.", "adapt", {"effects": [{"type": "add_turns", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}),
-			_choice("wc-rest", "Rest", "Wait out the worst of it.", "hold", {"effects": [{"type": "add_turns", "amount": 1}, {"type": "resume_mission"}]}),
-			_choice("wc-intel", "Gather intel", "Use the pause to listen.", "recon", {"effects": [{"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}),
+			_choice(
+				"wc-repair",
+				"Shelter and dry out",
+				"Spend materials to weatherproof the column's gear.",
+				"repair",
+				{"effects": [{"type": "spend_materials", "amount": 1}, {"type": "flag", "key": "weatherproofed"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"wc-ask",
+				"Ask locals for shelter",
+				"Trade influence for a dry roof and local knowledge.",
+				"ask",
+				{"effects": [{"type": "spend_influence", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"wc-reroute",
+				"Take the sheltered route",
+				"Add distance to stay out of the worst of it.",
+				"reroute",
+				{"effects": [{"type": "add_turns", "amount": 1}, {"type": "flag", "key": "took_sheltered_route"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"wc-adapt",
+				"March through the storm",
+				"Slow going, but the column learns the road.",
+				"adapt",
+				{"effects": [{"type": "add_turns", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}
+			),
 		],
 	}
 
@@ -200,9 +275,34 @@ static func _new_information() -> Dictionary:
 		"category": "intel",
 		"world_change": "new_intel",
 		"choices": [
-			_choice("ni-decode", "Decode", "Spend insight to clarify the map.", "recon", {"effects": [{"type": "spend_intel", "amount": 1}, {"type": "flag", "key": "decoded_report"}, {"type": "resume_mission"}]}),
-			_choice("ni-trade", "Trade info", "Spend influence for a cleaner reading.", "ask", {"effects": [{"type": "spend_influence", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}),
-			_choice("ni-ignore", "Press on", "File it and keep moving.", "adapt", {"effects": [{"type": "resume_mission"}]}),
+			_choice(
+				"ni-repair",
+				"Decode it fully",
+				"Spend insight to clarify the map and fix the gaps in the report.",
+				"repair",
+				{"effects": [{"type": "spend_intel", "amount": 1}, {"type": "flag", "key": "decoded_report"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"ni-ask",
+				"Trade for a cleaner reading",
+				"Spend influence to have an ally verify the report.",
+				"ask",
+				{"effects": [{"type": "spend_influence", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"ni-reroute",
+				"Act on it and divert",
+				"Change course now, before it's confirmed.",
+				"reroute",
+				{"effects": [{"type": "add_turns", "amount": 1}, {"type": "flag", "key": "diverted_on_report"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"ni-adapt",
+				"File it and press on",
+				"Keep moving; revisit the report later if it matters.",
+				"adapt",
+				{"effects": [{"type": "resume_mission"}]}
+			),
 		],
 	}
 
@@ -216,8 +316,33 @@ static func _ally_offers_help() -> Dictionary:
 		"category": "ally",
 		"world_change": "ally",
 		"choices": [
-			_choice("ah-troops", "Accept escort", "Gain a safer march.", "ask", {"effects": [{"type": "flag", "key": "escort"}, {"type": "resume_mission"}]}),
-			_choice("ah-supplies", "Request supplies", "Gain materials.", "supply", {"effects": [{"type": "gain_materials", "amount": 2}, {"type": "resume_mission"}]}),
-			_choice("ah-tribute", "Ask for coin-equivalent", "Gain materials; lose a little goodwill.", "adapt", {"effects": [{"type": "gain_materials", "amount": 3}, {"type": "flag", "key": "reputation_strain"}, {"type": "resume_mission"}]}),
+			_choice(
+				"ah-repair",
+				"Accept supplies",
+				"Take on materials to shore up the column.",
+				"repair",
+				{"effects": [{"type": "gain_materials", "amount": 2}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"ah-ask",
+				"Accept escort",
+				"Ask for company; gain a safer march.",
+				"ask",
+				{"effects": [{"type": "flag", "key": "escort"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"ah-reroute",
+				"Ask them to guide you elsewhere",
+				"Take the path the ally recommends instead.",
+				"reroute",
+				{"effects": [{"type": "add_turns", "amount": 1}, {"type": "gain_intel", "amount": 1}, {"type": "flag", "key": "ally_guided"}, {"type": "resume_mission"}]}
+			),
+			_choice(
+				"ah-adapt",
+				"Ask for coin-equivalent",
+				"Take more materials in exchange for a little goodwill.",
+				"adapt",
+				{"effects": [{"type": "gain_materials", "amount": 3}, {"type": "flag", "key": "reputation_strain"}, {"type": "resume_mission"}]}
+			),
 		],
 	}

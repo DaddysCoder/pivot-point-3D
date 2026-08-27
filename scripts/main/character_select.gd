@@ -25,6 +25,7 @@ extends Control
 @onready var preview_role: Label = $Panel/Margin/HBox/Preview/PreviewMargin/PreviewVBox/PreviewRole
 @onready var preview_pronouns: Label = $Panel/Margin/HBox/Preview/PreviewMargin/PreviewVBox/PreviewPronouns
 @onready var preview_bonus: Label = $Panel/Margin/HBox/Preview/PreviewMargin/PreviewVBox/PreviewBonus
+@onready var preview_portrait: TextureRect = $Panel/Margin/HBox/Preview/PreviewMargin/PreviewVBox/PreviewPortrait
 
 var _selected_role: String = ""
 var _selected_palette: String = "olive"
@@ -173,12 +174,16 @@ func _refresh_preview() -> void:
 	if _selected_role == "":
 		preview_role.text = "No role selected"
 		preview_bonus.text = ""
+		preview_portrait.visible = false
 	else:
 		for role in LeaderRegistry.list_all():
 			if role["id"] == _selected_role:
 				preview_role.text = str(role["role"])
 				preview_bonus.text = str(role["bonus"])
 				break
+		var portrait := ArtCatalog.leader_portrait(_selected_role)
+		preview_portrait.texture = portrait
+		preview_portrait.visible = portrait != null
 
 
 func _refresh_confirm() -> void:
@@ -196,4 +201,5 @@ func _confirm() -> void:
 		appearance,
 	)
 	LeaderRegistry.apply_starting_bonus(_selected_role)
+	SaveManager.autosave()
 	SceneRouter.to_base_hub()

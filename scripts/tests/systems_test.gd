@@ -11,6 +11,7 @@ func _ready() -> void:
 	failed += _test_leader_roster()
 	failed += _test_leader_select_and_bonus()
 	failed += _test_decision_load_caps_baseline_choices()
+	failed += _test_save_and_load_slot()
 	if failed == 0:
 		print("SYSTEMS_TEST_OK")
 		get_tree().quit(0)
@@ -196,3 +197,36 @@ func _test_decision_load_caps_baseline_choices() -> int:
 	if failures == 0:
 		print("OK decision_load_caps_baseline_choices")
 	return failures
+
+
+func _test_save_and_load_slot() -> int:
+	const TEST_SLOT := 2
+	GameState.reset_campaign(77)
+	GameState.set_character("engineer", "TEST-SIGN", "they/them", {"palette": "olive", "headwear": "none"})
+	GameState.materials = 4
+	GameState.turn = 3
+	SaveManager.save_to_slot(TEST_SLOT)
+
+	var summary := SaveManager.slot_summary(TEST_SLOT)
+	if not summary["occupied"] or summary["call_sign"] != "TEST-SIGN":
+		print("FAIL save slot summary ", summary)
+		SaveManager.delete_slot(TEST_SLOT)
+		return 1
+
+	GameState.reset_campaign(1)
+	if not SaveManager.load_slot(TEST_SLOT):
+		print("FAIL load slot returned false")
+		SaveManager.delete_slot(TEST_SLOT)
+		return 1
+	if GameState.call_sign != "TEST-SIGN" or GameState.leader_id != "engineer" or GameState.materials != 4 or GameState.turn != 3:
+		print("FAIL loaded state mismatch call_sign=", GameState.call_sign, " leader=", GameState.leader_id, " materials=", GameState.materials, " turn=", GameState.turn)
+		SaveManager.delete_slot(TEST_SLOT)
+		return 1
+
+	SaveManager.delete_slot(TEST_SLOT)
+	if SaveManager.slot_summary(TEST_SLOT)["occupied"]:
+		print("FAIL delete slot did not clear it")
+		return 1
+
+	print("OK save_and_load_slot")
+	return 0

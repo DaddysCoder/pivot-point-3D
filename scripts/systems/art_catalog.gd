@@ -9,6 +9,38 @@ const ICON_SHEET := "res://assets/art/03-icon-sheet.jpg"
 const EVENT_SHEET := "res://assets/art/04-event-card-sheet.jpg"
 const BRIDGE_NARRATIVE := "res://assets/art/05-event-bridge-destroyed-a.jpg"
 const BRIDGE_CHOICES := "res://assets/art/06-event-bridge-destroyed-b.jpg"
+
+## Event art pairs (narrative / choice card) sliced from the Gemini event sheet.
+## Not yet present on disk — texture() falls back to null and callers fall
+## back to EVENT_SHEET/BRIDGE_NARRATIVE until the PNGs land in assets/art/.
+const SUPPLIES_DELAYED_NARRATIVE := "res://assets/art/07-event-supplies-delayed-a.png"
+const SUPPLIES_DELAYED_CHOICES := "res://assets/art/07-event-supplies-delayed-b.png"
+const SCOUT_MISSING_NARRATIVE := "res://assets/art/08-event-scout-missing-a.png"
+const SCOUT_MISSING_CHOICES := "res://assets/art/08-event-scout-missing-b.png"
+const WEATHER_CHANGES_NARRATIVE := "res://assets/art/09-event-weather-changes-a.png"
+const WEATHER_CHANGES_CHOICES := "res://assets/art/09-event-weather-changes-b.png"
+const NEW_INFORMATION_NARRATIVE := "res://assets/art/10-event-new-information-a.png"
+const NEW_INFORMATION_CHOICES := "res://assets/art/10-event-new-information-b.png"
+const ALLY_OFFERS_HELP_NARRATIVE := "res://assets/art/11-event-ally-offers-help-a.png"
+const ALLY_OFFERS_HELP_CHOICES := "res://assets/art/11-event-ally-offers-help-b.png"
+
+## Front-facing leader portraits (character creator confirm/preview panel).
+const LEADER_PORTRAIT_MARCUS := "res://assets/art/12-leader-marcus.png"
+const LEADER_PORTRAIT_LI := "res://assets/art/13-leader-li.png"
+const LEADER_PORTRAIT_ELIAS := "res://assets/art/14-leader-elias.png"
+const LEADER_PORTRAIT_AMINA := "res://assets/art/15-leader-amina.png"
+const LEADER_PORTRAIT_ELARA := "res://assets/art/16-leader-elara.png"
+const LEADER_PORTRAIT_KAEL := "res://assets/art/17-leader-kael.png"
+
+## Play Style / accessibility icon set.
+const ICON_PREDICTABILITY := "res://assets/art/18-icon-predictability.png"
+const ICON_DECISION_LOAD := "res://assets/art/19-icon-decision-load.png"
+const ICON_TIME_PRESSURE := "res://assets/art/20-icon-time-pressure.png"
+const ICON_INFORMATION_DENSITY := "res://assets/art/21-icon-information-density.png"
+const ICON_MOTION := "res://assets/art/22-icon-motion.png"
+const ICON_SOUND := "res://assets/art/23-icon-sound.png"
+const ICON_ACCESSIBILITY_MENU := "res://assets/art/24-icon-accessibility-menu.png"
+
 const PARCHMENT_PANEL := "res://assets/ui/parchment-panel.png"
 const APP_ICON := "res://assets/ui/pivot-point-icon.png"
 
@@ -27,14 +59,66 @@ static func texture(path: String) -> Texture2D:
 	return null
 
 
+## Returns the choice-card art for `event_id` (narrative_art() returns the
+## matching narrative card). Falls back to the generic event sheet when the
+## per-event PNG isn't present on disk yet.
 static func event_art(event_id: String) -> Texture2D:
 	match event_id:
 		"bridge-destroyed":
 			return texture(BRIDGE_CHOICES)
-		"supplies-delayed", "scout-missing", "weather-changes", "new-information", "ally-offers-help":
-			return texture(EVENT_SHEET)
+		"supplies-delayed":
+			return texture(SUPPLIES_DELAYED_CHOICES) if ResourceLoader.exists(SUPPLIES_DELAYED_CHOICES) else texture(EVENT_SHEET)
+		"scout-missing":
+			return texture(SCOUT_MISSING_CHOICES) if ResourceLoader.exists(SCOUT_MISSING_CHOICES) else texture(EVENT_SHEET)
+		"weather-changes":
+			return texture(WEATHER_CHANGES_CHOICES) if ResourceLoader.exists(WEATHER_CHANGES_CHOICES) else texture(EVENT_SHEET)
+		"new-information":
+			return texture(NEW_INFORMATION_CHOICES) if ResourceLoader.exists(NEW_INFORMATION_CHOICES) else texture(EVENT_SHEET)
+		"ally-offers-help":
+			return texture(ALLY_OFFERS_HELP_CHOICES) if ResourceLoader.exists(ALLY_OFFERS_HELP_CHOICES) else texture(EVENT_SHEET)
 		_:
 			return texture(BRIDGE_NARRATIVE)
+
+
+## Returns the narrative-card art for `event_id`. Falls back to the generic
+## event sheet, then the Bridge Destroyed narrative card as a last resort.
+static func narrative_art(event_id: String) -> Texture2D:
+	match event_id:
+		"bridge-destroyed":
+			return texture(BRIDGE_NARRATIVE)
+		"supplies-delayed":
+			return texture(SUPPLIES_DELAYED_NARRATIVE) if ResourceLoader.exists(SUPPLIES_DELAYED_NARRATIVE) else texture(EVENT_SHEET)
+		"scout-missing":
+			return texture(SCOUT_MISSING_NARRATIVE) if ResourceLoader.exists(SCOUT_MISSING_NARRATIVE) else texture(EVENT_SHEET)
+		"weather-changes":
+			return texture(WEATHER_CHANGES_NARRATIVE) if ResourceLoader.exists(WEATHER_CHANGES_NARRATIVE) else texture(EVENT_SHEET)
+		"new-information":
+			return texture(NEW_INFORMATION_NARRATIVE) if ResourceLoader.exists(NEW_INFORMATION_NARRATIVE) else texture(EVENT_SHEET)
+		"ally-offers-help":
+			return texture(ALLY_OFFERS_HELP_NARRATIVE) if ResourceLoader.exists(ALLY_OFFERS_HELP_NARRATIVE) else texture(EVENT_SHEET)
+		_:
+			return texture(BRIDGE_NARRATIVE)
+
+
+## Front-facing leader portrait for the character creator's confirm/preview
+## panel. Returns null (caller falls back to the compact silhouette art)
+## until the sliced portrait PNGs land in assets/art/.
+static func leader_portrait(leader_id: String) -> Texture2D:
+	match leader_id:
+		"strategist":
+			return texture(LEADER_PORTRAIT_MARCUS)
+		"scout":
+			return texture(LEADER_PORTRAIT_LI)
+		"engineer":
+			return texture(LEADER_PORTRAIT_ELIAS)
+		"diplomat":
+			return texture(LEADER_PORTRAIT_AMINA)
+		"historian":
+			return texture(LEADER_PORTRAIT_ELARA)
+		"builder":
+			return texture(LEADER_PORTRAIT_KAEL)
+		_:
+			return null
 
 
 static func apply_parchment_panel(panel: PanelContainer) -> void:

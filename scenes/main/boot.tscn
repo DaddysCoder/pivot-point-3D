@@ -65,6 +65,11 @@ text = "Phase 1 Feel Test (sandbox)"
 layout_mode = 2
 text = "Options"
 
+[node name="FacilitatorProfiles" type="Button" parent="VBox"]
+layout_mode = 2
+text = "Facilitator Profiles"
+
 [connection signal="pressed" from="VBox/Begin" to="." method="_on_begin_pressed"]
 [connection signal="pressed" from="VBox/FeelTest" to="." method="_on_feel_test_pressed"]
 [connection signal="pressed" from="VBox/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="VBox/FacilitatorProfiles" to="." method="_on_facilitator_profiles_pressed"]

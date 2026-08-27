@@ -8,6 +8,7 @@ extends Control
 @onready var begin_btn: Button = $VBox/Begin
 @onready var feel_btn: Button = $VBox/FeelTest
 @onready var options_btn: Button = $VBox/Options
+@onready var facilitator_btn: Button = $VBox/FacilitatorProfiles
 
 
 func _ready() -> void:
@@ -22,14 +23,11 @@ func _ready() -> void:
 	ArtCatalog.style_button(begin_btn)
 	ArtCatalog.style_button(feel_btn)
 	ArtCatalog.style_button(options_btn)
+	ArtCatalog.style_button(facilitator_btn)
 
 
 func _on_begin_pressed() -> void:
-	GameState.reset_campaign()
-	if GameSettings.onboarding_seen:
-		SceneRouter.to_character_select()
-	else:
-		SceneRouter.to_onboarding()
+	SlotPicker.open(self)
 
 
 func _on_feel_test_pressed() -> void:
@@ -38,3 +36,7 @@ func _on_feel_test_pressed() -> void:
 
 func _on_options_pressed() -> void:
 	OptionsMenu.open(self, false)
+
+
+func _on_facilitator_profiles_pressed() -> void:
+	FacilitatorProfilesMenu.open(self)
