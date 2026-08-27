@@ -5,6 +5,7 @@ extends Node
 const SCENE_BOOT := "res://scenes/main/boot.tscn"
 const SCENE_ONBOARDING := "res://scenes/main/onboarding.tscn"
 const SCENE_FACILITATOR_PROFILES := "res://scenes/main/facilitator_profiles.tscn"
+const SCENE_SAVE_SLOTS := "res://scenes/main/save_slots.tscn"
 const SCENE_CHARACTER_SELECT := "res://scenes/main/character_select.tscn"
 const SCENE_BASE_HUB := "res://scenes/main/base_hub.tscn"
 const SCENE_SUPPLY_LINE := "res://scenes/main/supply_line.tscn"
@@ -25,6 +26,10 @@ func to_onboarding() -> void:
 
 func to_facilitator_profiles() -> void:
 	go(SCENE_FACILITATOR_PROFILES)
+
+
+func to_save_slots() -> void:
+	go(SCENE_SAVE_SLOTS)
 
 
 func to_character_select() -> void:
