@@ -19,6 +19,9 @@ enum MissionStatus { IDLE, BRIEFING, ACTIVE, PIVOT, COMPLETE, FAILED }
 
 var seed: int = 42
 var leader_id: String = ""
+var call_sign: String = ""
+var pronouns: String = ""
+var appearance: Dictionary = {"palette": "olive", "headwear": "none"}
 var materials: int = 8
 var intel: int = 3
 var influence: int = 1
@@ -59,6 +62,9 @@ func reset_campaign(new_seed: int = -1) -> void:
 	else:
 		seed = new_seed
 	leader_id = ""
+	call_sign = ""
+	pronouns = ""
+	appearance = {"palette": "olive", "headwear": "none"}
 	materials = 8
 	intel = 3
 	influence = 1
@@ -96,6 +102,15 @@ func clear_mission() -> void:
 
 func set_leader(id: String) -> void:
 	leader_id = id
+
+
+## Persists the operator built in the character creator: role, call sign,
+## optional pronouns, and cosmetic appearance (palette + headwear).
+func set_character(role_id: String, new_call_sign: String, new_pronouns: String, new_appearance: Dictionary) -> void:
+	leader_id = role_id
+	call_sign = new_call_sign
+	pronouns = new_pronouns
+	appearance = new_appearance.duplicate()
 
 
 func append_log(line: String) -> void:
