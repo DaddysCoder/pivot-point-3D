@@ -22,6 +22,12 @@ func _ready() -> void:
 	ArtCatalog.style_ink_label(flavor, 14, true)
 	GameState.pivot_opened.connect(_on_pivot_opened)
 	GameState.pivot_closed.connect(_on_pivot_closed)
+	GameSettings.information_style_changed.connect(_on_information_style_changed)
+
+
+func _on_information_style_changed(_style: GameSettings.InformationStyle) -> void:
+	if visible:
+		_rebuild_choices()
 
 
 func _on_pivot_opened(event_id: String) -> void:
@@ -58,13 +64,32 @@ func _rebuild_choices() -> void:
 		var req: Array = choice.get("require_equipment", [])
 		if not req.is_empty():
 			label += "  [%s]" % ", ".join(PackedStringArray(req))
-		btn.text = label
+		var affordable := bool(choice.get("affordable", true))
+		var description := _describe(str(choice.get("description", "")), affordable)
+		btn.text = label if description == "" else "%s\n%s" % [label, description]
 		btn.tooltip_text = str(choice.get("description", ""))
-		btn.disabled = not bool(choice.get("affordable", true))
+		btn.disabled = not affordable
 		ArtCatalog.style_button(btn)
 		var cid := str(choice["id"])
 		btn.pressed.connect(func(): _select(cid))
 		choices_box.add_child(btn)
+
+
+## Applies GameSettings.information_style to a choice description, matching
+## the 2D reference build's DecisionPanel (short = hidden, standard =
+## truncated, detailed = full text).
+func _describe(description: String, affordable: bool) -> String:
+	var text := ""
+	match GameSettings.information_style:
+		GameSettings.InformationStyle.SHORT:
+			text = ""
+		GameSettings.InformationStyle.DETAILED:
+			text = description
+		_:
+			text = description if description.length() <= 90 else description.substr(0, 90) + "…"
+	if not affordable and text != "":
+		text += " (unavailable — find another move)"
+	return text
 
 
 func _select(choice_id: String) -> void:

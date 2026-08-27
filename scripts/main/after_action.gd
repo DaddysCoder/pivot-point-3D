@@ -24,7 +24,7 @@ func _ready() -> void:
 	var lines: PackedStringArray = PackedStringArray([
 		"AFTER ACTION — SUPPLY LINE",
 		"",
-		"Leader: %s" % str(s.get("leader", "")),
+		"Operator: %s" % (str(GameState.call_sign) if GameState.call_sign != "" else str(s.get("leader", ""))),
 		"Route: %s" % str(s.get("route", "")),
 		"Turns: %d" % int(s.get("turns", 0)),
 		"Pivots faced: %d" % int(s.get("pivots", 0)),

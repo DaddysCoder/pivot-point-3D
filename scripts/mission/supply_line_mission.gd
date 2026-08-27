@@ -40,13 +40,26 @@ static func open_pivot(event_id: String) -> void:
 	GameState.mission_changed.emit()
 
 
+## Decision load caps baseline (non-equipment) choices; equipment-gated
+## choices are additive and always shown once their kit is equipped —
+## mirrors the 2D reference build's DecisionPanel.applyDecisionLoad().
 static func _filter_choices(ev: Dictionary) -> Array[String]:
-	var ids: Array[String] = []
+	var baseline: Array[String] = []
+	var equipment: Array[String] = []
 	for c in ev.get("choices", []):
 		var req: Array = c.get("require_equipment", [])
 		if not GameState.loadout_has_all(req):
 			continue
-		ids.append(str(c["id"]))
+		if req.is_empty():
+			baseline.append(str(c["id"]))
+		else:
+			equipment.append(str(c["id"]))
+	var load := GameSettings.decision_load
+	if load != GameSettings.DECISION_LOAD_OPEN and baseline.size() > load:
+		baseline = baseline.slice(0, load)
+	var ids: Array[String] = []
+	ids.append_array(baseline)
+	ids.append_array(equipment)
 	return ids
 
 
