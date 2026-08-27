@@ -153,6 +153,13 @@ theme_override_font_sizes/font_size = 12
 text = "FIELD PREVIEW"
 horizontal_alignment = 1
 
+[node name="PreviewPortrait" type="TextureRect" parent="Panel/Margin/HBox/Preview/PreviewMargin/PreviewVBox"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+visible = false
+
 [node name="HeadwearHolder" type="CenterContainer" parent="Panel/Margin/HBox/Preview/PreviewMargin/PreviewVBox"]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
