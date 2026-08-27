@@ -1,0 +1,98 @@
+[gd_scene load_steps=13 format=3 uid="uid://bsupplyline01"]
+
+[ext_resource type="Script" path="res://scripts/main/supply_line.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/camera/follow_camera.tscn" id="3_cam"]
+[ext_resource type="PackedScene" path="res://scenes/ui/interaction_prompt.tscn" id="4_prompt"]
+[ext_resource type="Script" path="res://scripts/world/supply_line_builder.gd" id="5_builder"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pivot_panel.tscn" id="6_pivot"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+sky_top_color = Color(0.32, 0.45, 0.70, 1)
+sky_horizon_color = Color(0.92, 0.70, 0.45, 1)
+ground_bottom_color = Color(0.25, 0.22, 0.16, 1)
+ground_horizon_color = Color(0.75, 0.55, 0.35, 1)
+
+[sub_resource type="Sky" id="Sky_main"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_main")
+ambient_light_source = 2
+ambient_light_color = Color(0.85, 0.72, 0.55, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.86, 0.68, 0.45, 1)
+fog_density = 0.0012
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_crossing"]
+size = Vector3(16, 4, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_highwatch"]
+size = Vector3(20, 6, 16)
+
+[node name="SupplyLine" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 12, 28, 8)
+light_color = Color(1, 0.86, 0.65, 1)
+light_energy = 1.4
+shadow_enabled = true
+directional_shadow_max_distance = 160.0
+
+[node name="World" type="Node3D" parent="."]
+script = ExtResource("5_builder")
+
+[node name="Generated" type="Node3D" parent="World"]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 35)
+camera_path = NodePath("../FollowCamera")
+
+[node name="FollowCamera" parent="." instance=ExtResource("3_cam")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.65, 35)
+target_path = NodePath("../Player")
+
+[node name="CrossingTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -22)
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CrossingTrigger"]
+shape = SubResource("BoxShape3D_crossing")
+
+[node name="HighwatchTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -72)
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HighwatchTrigger"]
+shape = SubResource("BoxShape3D_highwatch")
+
+[node name="UI" type="Node" parent="."]
+
+[node name="InteractionPrompt" parent="UI" instance=ExtResource("4_prompt")]
+
+[node name="PivotPanel" parent="UI" instance=ExtResource("6_pivot")]
+
+[node name="HUD" parent="UI" instance=ExtResource("7_hud")]
+
+[node name="Hint" type="Label" parent="UI"]
+offset_left = 24.0
+offset_top = 1000.0
+offset_right = 900.0
+offset_bottom = 1040.0
+text = "Follow the Kingsroad north to the river. The world shows the break before any card."

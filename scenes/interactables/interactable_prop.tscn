@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://binteractprop01"]
+
+[ext_resource type="Script" path="res://scripts/interaction/simple_prop_interactable.gd" id="1_script"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_area"]
+size = Vector3(1.8, 1.8, 1.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_marker"]
+size = Vector3(0.9, 1.2, 0.9)
+
+[node name="InteractableProp" type="Area3D"]
+collision_layer = 4
+collision_mask = 0
+monitoring = true
+monitorable = true
+script = ExtResource("1_script")
+prompt_text = "Use"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("BoxShape3D_area")
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_marker")
+
+[node name="Status" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+pixel_size = 0.012
+text = ""
+font_size = 28
+outline_size = 8
+modulate = Color(0.91, 0.86, 0.76, 1)
