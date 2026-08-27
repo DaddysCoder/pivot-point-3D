@@ -10,6 +10,7 @@ func _ready() -> void:
 	failed += _test_director_triggers_when_enabled()
 	failed += _test_leader_roster()
 	failed += _test_leader_select_and_bonus()
+	failed += _test_decision_load_caps_baseline_choices()
 	if failed == 0:
 		print("SYSTEMS_TEST_OK")
 		get_tree().quit(0)
@@ -165,3 +166,33 @@ func _test_leader_select_and_bonus() -> int:
 
 	print("OK leader_select_and_bonus")
 	return 0
+
+
+func _test_decision_load_caps_baseline_choices() -> int:
+	# bridge-destroyed has 4 baseline (no-equipment) choices: bd-repair,
+	# bd-ask, bd-reroute, bd-adapt. Equipment-gated choices are additive.
+	var previous_load := GameSettings.decision_load
+	var failures := 0
+
+	GameSettings.decision_load = 2
+	GameState.reset_campaign(5)
+	SupplyLineMission.begin()
+	SupplyLineMission.open_pivot("bridge-destroyed")
+	var baseline_2 := GameState.available_choice_ids.filter(func(id): return id.begins_with("bd-") and id in ["bd-repair", "bd-ask", "bd-reroute", "bd-adapt"])
+	if baseline_2.size() != 2:
+		print("FAIL decision_load=2 expected 2 baseline choices, got ", baseline_2)
+		failures += 1
+
+	GameSettings.decision_load = GameSettings.DECISION_LOAD_OPEN
+	GameState.reset_campaign(5)
+	SupplyLineMission.begin()
+	SupplyLineMission.open_pivot("bridge-destroyed")
+	var baseline_open := GameState.available_choice_ids.filter(func(id): return id in ["bd-repair", "bd-ask", "bd-reroute", "bd-adapt"])
+	if baseline_open.size() != 4:
+		print("FAIL decision_load=open expected 4 baseline choices, got ", baseline_open)
+		failures += 1
+
+	GameSettings.decision_load = previous_load
+	if failures == 0:
+		print("OK decision_load_caps_baseline_choices")
+	return failures

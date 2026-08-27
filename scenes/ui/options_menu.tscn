@@ -20,74 +20,149 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -220.0
-offset_right = 260.0
-offset_bottom = 220.0
+offset_left = -320.0
+offset_top = -340.0
+offset_right = 320.0
+offset_bottom = 340.0
 
 [node name="Margin" type="MarginContainer" parent="Panel"]
 layout_mode = 2
 theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 24
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+[node name="Outer" type="VBoxContainer" parent="Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+[node name="Title" type="Label" parent="Panel/Margin/Outer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
-text = "OPTIONS"
+text = "PLAY STYLE / OPTIONS"
 horizontal_alignment = 1
 
-[node name="CameraRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="Panel/Margin/Outer"]
+custom_minimum_size = Vector2(0, 520)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin/Outer/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="PredictabilityRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="Panel/Margin/VBox/CameraRow"]
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/PredictabilityRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Predictability"
+
+[node name="Predictability" type="OptionButton" parent="Panel/Margin/Outer/Scroll/VBox/PredictabilityRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="DecisionLoadRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/DecisionLoadRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Decision Load"
+
+[node name="DecisionLoad" type="OptionButton" parent="Panel/Margin/Outer/Scroll/VBox/DecisionLoadRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimePressureRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/TimePressureRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Time Pressure"
+
+[node name="TimePressure" type="OptionButton" parent="Panel/Margin/Outer/Scroll/VBox/TimePressureRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InformationStyleRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/InformationStyleRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Information Style"
+
+[node name="InformationStyle" type="OptionButton" parent="Panel/Margin/Outer/Scroll/VBox/InformationStyleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CameraRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/CameraRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 text = "Reduced Camera Motion"
 
-[node name="ReducedCamera" type="CheckButton" parent="Panel/Margin/VBox/CameraRow"]
+[node name="ReducedCamera" type="CheckButton" parent="Panel/Margin/Outer/Scroll/VBox/CameraRow"]
 layout_mode = 2
 
-[node name="InvertYRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+[node name="TransitionRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="Panel/Margin/VBox/InvertYRow"]
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/TransitionRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Mission Transitions"
+
+[node name="Transition" type="OptionButton" parent="Panel/Margin/Outer/Scroll/VBox/TransitionRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="InvertYRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/InvertYRow"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 text = "Invert Y Look"
 
-[node name="InvertY" type="CheckButton" parent="Panel/Margin/VBox/InvertYRow"]
+[node name="InvertY" type="CheckButton" parent="Panel/Margin/Outer/Scroll/VBox/InvertYRow"]
 layout_mode = 2
 
-[node name="CursorRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+[node name="CursorRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="Panel/Margin/VBox/CursorRow"]
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/CursorRow"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 text = "Large, High-Contrast Cursor"
 
-[node name="LargeCursor" type="CheckButton" parent="Panel/Margin/VBox/CursorRow"]
+[node name="LargeCursor" type="CheckButton" parent="Panel/Margin/Outer/Scroll/VBox/CursorRow"]
 layout_mode = 2
 
-[node name="SensitivityRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+[node name="SensitivityRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Label" type="Label" parent="Panel/Margin/VBox/SensitivityRow"]
+[node name="Label" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/SensitivityRow"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 text = "Mouse Sensitivity"
 
-[node name="Sensitivity" type="HSlider" parent="Panel/Margin/VBox/SensitivityRow"]
+[node name="Sensitivity" type="HSlider" parent="Panel/Margin/Outer/Scroll/VBox/SensitivityRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -96,12 +171,37 @@ max_value = 0.3
 step = 0.01
 value = 0.12
 
-[node name="Value" type="Label" parent="Panel/Margin/VBox/SensitivityRow"]
+[node name="Value" type="Label" parent="Panel/Margin/Outer/Scroll/VBox/SensitivityRow"]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "0.12"
 horizontal_alignment = 2
 
-[node name="Close" type="Button" parent="Panel/Margin/VBox"]
+[node name="SoundLabel" type="Label" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+text = "Sound"
+
+[node name="SoundRow" type="HBoxContainer" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Music" type="CheckButton" parent="Panel/Margin/Outer/Scroll/VBox/SoundRow"]
+layout_mode = 2
+text = "Music"
+
+[node name="Effects" type="CheckButton" parent="Panel/Margin/Outer/Scroll/VBox/SoundRow"]
+layout_mode = 2
+text = "Effects"
+
+[node name="Alerts" type="CheckButton" parent="Panel/Margin/Outer/Scroll/VBox/SoundRow"]
+layout_mode = 2
+text = "Alerts"
+
+[node name="CalmNote" type="Label" parent="Panel/Margin/Outer/Scroll/VBox"]
+layout_mode = 2
+text = "Failure presentation is always calm and informational. No flashing, buzzers, or humiliation screens."
+autowrap_mode = 3
+
+[node name="Close" type="Button" parent="Panel/Margin/Outer"]
 layout_mode = 2
 text = "Close"
