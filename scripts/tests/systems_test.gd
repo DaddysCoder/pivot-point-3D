@@ -11,7 +11,7 @@ func _ready() -> void:
 	failed += _test_leader_roster()
 	failed += _test_leader_select_and_bonus()
 	failed += _test_decision_load_caps_baseline_choices()
-	failed += _test_save_and_load_slot()
+	failed += _test_save_slot_round_trip()
 	if failed == 0:
 		print("SYSTEMS_TEST_OK")
 		get_tree().quit(0)
@@ -199,34 +199,45 @@ func _test_decision_load_caps_baseline_choices() -> int:
 	return failures
 
 
-func _test_save_and_load_slot() -> int:
-	const TEST_SLOT := 2
+func _test_save_slot_round_trip() -> int:
 	GameState.reset_campaign(77)
-	GameState.set_character("engineer", "TEST-SIGN", "they/them", {"palette": "olive", "headwear": "none"})
-	GameState.materials = 4
-	GameState.turn = 3
-	SaveManager.save_to_slot(TEST_SLOT)
+	GameState.set_character("engineer", "HAWK", "they/them", {"palette": "cobalt", "headwear": "cap"})
+	LeaderRegistry.apply_starting_bonus("engineer")
+	CraftingEngine.craft("repair-kit")
+	SupplyLineMission.begin()
+	SupplyLineMission.open_pivot("bridge-destroyed")
 
-	var summary := SaveManager.slot_summary(TEST_SLOT)
-	if not summary["occupied"] or summary["call_sign"] != "TEST-SIGN":
-		print("FAIL save slot summary ", summary)
-		SaveManager.delete_slot(TEST_SLOT)
-		return 1
+	var slot_id := SaveStore.new_slot_id()
+	SaveStore.save_slot(slot_id, GameState.call_sign)
 
 	GameState.reset_campaign(1)
-	if not SaveManager.load_slot(TEST_SLOT):
-		print("FAIL load slot returned false")
-		SaveManager.delete_slot(TEST_SLOT)
-		return 1
-	if GameState.call_sign != "TEST-SIGN" or GameState.leader_id != "engineer" or GameState.materials != 4 or GameState.turn != 3:
-		print("FAIL loaded state mismatch call_sign=", GameState.call_sign, " leader=", GameState.leader_id, " materials=", GameState.materials, " turn=", GameState.turn)
-		SaveManager.delete_slot(TEST_SLOT)
+	if GameState.call_sign == "HAWK":
+		print("FAIL reset_campaign did not clear call_sign")
+		SaveStore.delete_slot(slot_id)
 		return 1
 
-	SaveManager.delete_slot(TEST_SLOT)
-	if SaveManager.slot_summary(TEST_SLOT)["occupied"]:
-		print("FAIL delete slot did not clear it")
+	var loaded := SaveStore.load_slot(slot_id)
+	SaveStore.delete_slot(slot_id)
+	if not loaded:
+		print("FAIL load_slot reported failure")
 		return 1
-
-	print("OK save_and_load_slot")
+	if GameState.call_sign != "HAWK" or GameState.pronouns != "they/them":
+		print("FAIL identity not restored: ", GameState.call_sign, " / ", GameState.pronouns)
+		return 1
+	if GameState.leader_id != "engineer":
+		print("FAIL role not restored: ", GameState.leader_id)
+		return 1
+	if str(GameState.appearance.get("palette", "")) != "cobalt" or str(GameState.appearance.get("headwear", "")) != "cap":
+		print("FAIL appearance not restored: ", GameState.appearance)
+		return 1
+	if GameState.get_owned_quantity("repair-kit") != 1:
+		print("FAIL inventory not restored")
+		return 1
+	if GameState.mission_status != GameState.MissionStatus.PIVOT or GameState.active_event_id != "bridge-destroyed":
+		print("FAIL mission/pivot state not restored: ", GameState.mission_status, " ", GameState.active_event_id)
+		return 1
+	if GameState.active_slot_id != slot_id:
+		print("FAIL active_slot_id not set after load")
+		return 1
+	print("OK save_slot_round_trip")
 	return 0

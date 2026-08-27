@@ -19,7 +19,6 @@ GameState="*res://scripts/systems/game_state.gd"
 SceneRouter="*res://scripts/systems/scene_router.gd"
 CursorManager="*res://scripts/systems/cursor_manager.gd"
 SaveManager="*res://scripts/systems/save_manager.gd"
-FacilitatorProfiles="*res://scripts/systems/facilitator_profiles.gd"
 
 [display]
 

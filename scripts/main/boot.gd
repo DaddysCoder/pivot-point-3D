@@ -6,9 +6,10 @@ extends Control
 @onready var title: Label = $VBox/Title
 @onready var tag: Label = $VBox/Tag
 @onready var begin_btn: Button = $VBox/Begin
+@onready var continue_btn: Button = $VBox/Continue
 @onready var feel_btn: Button = $VBox/FeelTest
 @onready var options_btn: Button = $VBox/Options
-@onready var facilitator_btn: Button = $VBox/FacilitatorProfiles
+@onready var facilitator_btn: Button = $VBox/Facilitator
 
 
 func _ready() -> void:
@@ -21,13 +22,23 @@ func _ready() -> void:
 	ArtCatalog.style_ink_label(tag, 20, true)
 	tag.add_theme_color_override("font_color", Color(0.90, 0.84, 0.70, 1))
 	ArtCatalog.style_button(begin_btn)
+	ArtCatalog.style_button(continue_btn)
 	ArtCatalog.style_button(feel_btn)
 	ArtCatalog.style_button(options_btn)
 	ArtCatalog.style_button(facilitator_btn)
+	continue_btn.disabled = SaveStore.list_slots().is_empty()
 
 
 func _on_begin_pressed() -> void:
-	SlotPicker.open(self)
+	GameState.reset_campaign()
+	if GameSettings.onboarding_seen:
+		SceneRouter.to_character_select()
+	else:
+		SceneRouter.to_onboarding()
+
+
+func _on_continue_pressed() -> void:
+	SceneRouter.to_save_slots()
 
 
 func _on_feel_test_pressed() -> void:
@@ -38,5 +49,5 @@ func _on_options_pressed() -> void:
 	OptionsMenu.open(self, false)
 
 
-func _on_facilitator_profiles_pressed() -> void:
-	FacilitatorProfilesMenu.open(self)
+func _on_facilitator_pressed() -> void:
+	SceneRouter.to_facilitator_profiles()
