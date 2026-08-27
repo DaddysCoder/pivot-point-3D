@@ -8,6 +8,8 @@ func _ready() -> void:
 	failed += _test_bridge_equipment_filter()
 	failed += _test_director_disabled()
 	failed += _test_director_triggers_when_enabled()
+	failed += _test_leader_roster()
+	failed += _test_leader_select_and_bonus()
 	if failed == 0:
 		print("SYSTEMS_TEST_OK")
 		get_tree().quit(0)
@@ -86,4 +88,80 @@ func _test_director_triggers_when_enabled() -> int:
 		print("FAIL expected trigger/advisory ", d)
 		return 1
 	print("OK director_triggers_when_enabled ", d.get("type"), " ", d.get("event_id"))
+	return 0
+
+
+func _test_leader_roster() -> int:
+	var leaders := LeaderRegistry.list_all()
+	if leaders.size() != 6:
+		print("FAIL leader roster size ", leaders.size())
+		return 1
+	var seen_ids := {}
+	for leader in leaders:
+		var lid := str(leader.get("id", ""))
+		if lid == "" or seen_ids.has(lid):
+			print("FAIL leader id missing/duplicate ", lid)
+			return 1
+		seen_ids[lid] = true
+		if str(leader.get("blurb", "")) == "":
+			print("FAIL leader blurb missing for ", lid)
+			return 1
+		if str(leader.get("bonus", "")) == "":
+			print("FAIL leader bonus missing for ", lid)
+			return 1
+	print("OK leader_roster")
+	return 0
+
+
+func _test_leader_select_and_bonus() -> int:
+	# Mirrors character_select.gd's _confirm(): set_leader() then apply_starting_bonus().
+	var expectations := [
+		{"id": "strategist", "resource": "intel", "delta": 1},
+		{"id": "historian", "resource": "intel", "delta": 1},
+		{"id": "engineer", "resource": "materials", "delta": 2},
+		{"id": "builder", "resource": "materials", "delta": 2},
+		{"id": "diplomat", "resource": "influence", "delta": 1},
+	]
+	for expectation in expectations:
+		var lid := str(expectation["id"])
+		GameState.reset_campaign(1)
+		var baseline := {
+			"materials": GameState.materials,
+			"intel": GameState.intel,
+			"influence": GameState.influence,
+		}
+		GameState.set_leader(lid)
+		LeaderRegistry.apply_starting_bonus(lid)
+		if GameState.leader_id != lid:
+			print("FAIL leader_id not set for ", lid)
+			return 1
+		var resource := str(expectation["resource"])
+		var expected: int = int(baseline[resource]) + int(expectation["delta"])
+		var actual: int = GameState.get(resource)
+		if actual != expected:
+			print("FAIL bonus for ", lid, " expected ", resource, "=", expected, " got ", actual)
+			return 1
+		for other in ["materials", "intel", "influence"]:
+			if other == resource:
+				continue
+			if GameState.get(other) != baseline[other]:
+				print("FAIL unexpected change to ", other, " for ", lid)
+				return 1
+
+	# Scout applies two bonuses at once (intel + materials).
+	GameState.reset_campaign(1)
+	var scout_baseline := {"materials": GameState.materials, "intel": GameState.intel}
+	GameState.set_leader("scout")
+	LeaderRegistry.apply_starting_bonus("scout")
+	if GameState.leader_id != "scout":
+		print("FAIL leader_id not set for scout")
+		return 1
+	if GameState.intel != int(scout_baseline["intel"]) + 1:
+		print("FAIL scout intel bonus ", GameState.intel)
+		return 1
+	if GameState.materials != int(scout_baseline["materials"]) + 1:
+		print("FAIL scout materials bonus ", GameState.materials)
+		return 1
+
+	print("OK leader_select_and_bonus")
 	return 0
