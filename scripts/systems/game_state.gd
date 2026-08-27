@@ -55,6 +55,11 @@ var director_last_decision: String = "none"
 var last_after_action: Dictionary = {}
 var input_locked: bool = false
 
+## Which named save slot (if any) this campaign autosaves to. Not part of
+## to_snapshot() — it's where the state lives, not state itself.
+var active_slot_id: String = ""
+var active_slot_name: String = ""
+
 
 func reset_campaign(new_seed: int = -1) -> void:
 	if new_seed < 0:
@@ -80,6 +85,8 @@ func reset_campaign(new_seed: int = -1) -> void:
 	advisory_text = ""
 	last_after_action = {}
 	input_locked = false
+	active_slot_id = ""
+	active_slot_name = ""
 	resources_changed.emit()
 	inventory_changed.emit()
 	loadout_changed.emit()
@@ -111,6 +118,95 @@ func set_character(role_id: String, new_call_sign: String, new_pronouns: String,
 	call_sign = new_call_sign
 	pronouns = new_pronouns
 	appearance = new_appearance.duplicate()
+
+
+## Snapshot of everything a named save slot needs to resume the campaign.
+func to_snapshot() -> Dictionary:
+	return {
+		"seed": seed,
+		"leader_id": leader_id,
+		"call_sign": call_sign,
+		"pronouns": pronouns,
+		"appearance": appearance.duplicate(),
+		"materials": materials,
+		"intel": intel,
+		"influence": influence,
+		"inventory": inventory.duplicate(true),
+		"active_loadout": active_loadout.duplicate(),
+		"mission_id": mission_id,
+		"mission_status": mission_status,
+		"turn": turn,
+		"pivot_count": pivot_count,
+		"active_event_id": active_event_id,
+		"triggered_event_ids": triggered_event_ids.duplicate(),
+		"flags": flags.duplicate(),
+		"mission_log": mission_log.duplicate(),
+		"available_choice_ids": available_choice_ids.duplicate(),
+		"resume_choice_ids": resume_choice_ids.duplicate(),
+		"final_route": final_route,
+		"advisory_text": advisory_text,
+		"director_enabled": director_enabled,
+		"predictability": predictability,
+		"director_intensity": director_intensity,
+		"director_cooldown": director_cooldown,
+		"director_history": director_history.duplicate(true),
+		"director_recent_actions": director_recent_actions.duplicate(),
+		"director_advisory_pending": director_advisory_pending,
+		"director_last_decision": director_last_decision,
+		"last_after_action": last_after_action.duplicate(true),
+	}
+
+
+## Restores a snapshot produced by to_snapshot(). Missing keys keep current
+## defaults, so older/partial saves don't hard-fail.
+func apply_snapshot(data: Dictionary) -> void:
+	seed = int(data.get("seed", seed))
+	leader_id = str(data.get("leader_id", leader_id))
+	call_sign = str(data.get("call_sign", call_sign))
+	pronouns = str(data.get("pronouns", pronouns))
+	appearance = (data.get("appearance", appearance) as Dictionary).duplicate()
+	materials = int(data.get("materials", materials))
+	intel = int(data.get("intel", intel))
+	influence = int(data.get("influence", influence))
+	inventory = (data.get("inventory", []) as Array).duplicate(true)
+	active_loadout.clear()
+	for id in data.get("active_loadout", []):
+		active_loadout.append(str(id))
+	mission_id = str(data.get("mission_id", mission_id))
+	mission_status = int(data.get("mission_status", mission_status))
+	turn = int(data.get("turn", turn))
+	pivot_count = int(data.get("pivot_count", pivot_count))
+	active_event_id = str(data.get("active_event_id", active_event_id))
+	triggered_event_ids.clear()
+	for id in data.get("triggered_event_ids", []):
+		triggered_event_ids.append(str(id))
+	flags = (data.get("flags", {}) as Dictionary).duplicate()
+	mission_log.clear()
+	for line in data.get("mission_log", []):
+		mission_log.append(str(line))
+	available_choice_ids.clear()
+	for id in data.get("available_choice_ids", []):
+		available_choice_ids.append(str(id))
+	resume_choice_ids.clear()
+	for id in data.get("resume_choice_ids", []):
+		resume_choice_ids.append(str(id))
+	final_route = str(data.get("final_route", final_route))
+	advisory_text = str(data.get("advisory_text", advisory_text))
+	director_enabled = bool(data.get("director_enabled", director_enabled))
+	predictability = int(data.get("predictability", predictability))
+	director_intensity = int(data.get("director_intensity", director_intensity))
+	director_cooldown = int(data.get("director_cooldown", director_cooldown))
+	director_history = (data.get("director_history", []) as Array).duplicate(true)
+	director_recent_actions.clear()
+	for a in data.get("director_recent_actions", []):
+		director_recent_actions.append(str(a))
+	director_advisory_pending = str(data.get("director_advisory_pending", director_advisory_pending))
+	director_last_decision = str(data.get("director_last_decision", director_last_decision))
+	last_after_action = (data.get("last_after_action", {}) as Dictionary).duplicate(true)
+	resources_changed.emit()
+	inventory_changed.emit()
+	loadout_changed.emit()
+	mission_changed.emit()
 
 
 func append_log(line: String) -> void:

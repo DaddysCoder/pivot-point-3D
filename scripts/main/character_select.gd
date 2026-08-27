@@ -196,4 +196,9 @@ func _confirm() -> void:
 		appearance,
 	)
 	LeaderRegistry.apply_starting_bonus(_selected_role)
+
+	GameState.active_slot_id = SaveStore.new_slot_id()
+	GameState.active_slot_name = GameState.call_sign
+	SaveStore.save_slot(GameState.active_slot_id, GameState.active_slot_name)
+
 	SceneRouter.to_base_hub()
